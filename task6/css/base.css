@@ -5,13 +5,14 @@
 }
 
 body{
-	background-color:#5d5d5d;
+    background-color:#5d5d5d;
+
 }
 .newspaper{
     background-color:#ffffff;
     width: 980px;
     height: 1386px;
-    margin: 100px auto;
+    left: calc(50% - 490px);
     position: absolute;
 }
 
@@ -358,7 +359,6 @@ aside{
     margin-top: 40px;
     margin-left: 10px;
     border-left: 3px solid #72b16a;
-    float: left;
 }
 
 .swing-cha-para{

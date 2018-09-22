@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>任务六：基础JavaScript练习（三）</title>
+  <style>
+    li {
+            display: inline-block;
+            background-color: #cd4a48;
+            color: #f3f6f7;
+            font-size: 20px;
+            text-align: center;
+            padding: 5px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<!-- 基于任务四进行升级
+将新元素输入框从input改为textarea
+允许一次批量输入多个内容，格式可以为数字、中文、英文等，可以通过用回车，逗号（全角半角均可），顿号，空格（全角半角、Tab等均可）等符号作为不同内容的间隔
+增加一个查询文本输入框，和一个查询按钮，当点击查询时，将查询词在各个元素内容中做模糊匹配，将匹配到的内容进行特殊标识，如文字颜色等。举例，内容中有abcd，查询词为ab或bc，则该内容需要标识 -->
+
+<body>
+  <textarea id="inNum" cols="50" rows="3"></textarea>
+  <br />
+  <button id="btnLeftIn">左侧入</button>
+  <button id="btnRightIn">右侧入</button>
+  <button id="btnLeftOut">左侧出</button>
+  <button id="btnRightOut">右侧出</button>
+  <br />
+  <input type="text" id="query1" />
+  <button id="btnSearch">搜索</button>
+
+  <!--数字队列-->
+  <ul id="outNum"></ul>
+
+  <script type="text/javascript">
+    //绑定变量
+    var inNum = document.getElementById("inNum");
+    var outNum = document.getElementById("outNum");
+    var btnLeftIn = document.getElementById("btnLeftIn");
+    var btnRightIn = document.getElementById("btnRightIn");
+    var btnLeftOut = document.getElementById("btnLeftOut");
+    var btnRightOut = document.getElementById("btnRightOut");
+    var btnSearch = document.getElementById("btnSearch");
+
+    //插入数字
+    function insert(direction) {
+      if (inNum.value == "") {
+        alert("请输入需要插入的值");
+        inNum.focus();
+      } else {
+        var inputArray = inNum.value.split(/,|，|、|\s|\r/);
+        for (var i = 0; i < inputArray.length; i++) {
+          var new_node = document.createTextNode(inputArray[i]);
+          var oLi = document.createElement("li");
+          oLi.innerHTML = inNum.value;
+          if (direction === "left") { //点击左侧按钮插入
+            outNum.insertBefore(oLi, outNum.childNodes[0]); //将生成的li元素从前方放入
+          } else if (direction === "right") { //点击右侧按钮插入
+            outNum.appendChild(oLi); //将生成的li元素从末尾放入                     
+          }
+        }
+      }
+    }
+
+    // 删除数字
+    function del(node, direction) {
+      if (outNum.childNodes.length <= 0) {
+        alert("不存在元素可以删除");
+        return false;
+      } else {
+        if (direction === "left") { //点击左侧按钮删除
+          alert("删除数字：" + outNum.firstChild.innerText + "！");
+          outNum.removeChild(outNum.firstChild);
+        } else if (direction === "right") { //点击右侧按钮删除
+          alert("删除数字：" + outNum.lastChild.innerText + "！");
+          outNum.removeChild(outNum.lastChild);
+        } else { //点击li标签删除
+          alert("删除数字：" + outNum.removeChild(node).innerText + "！");
+        }
+      }
+    }
+    //搜索
+    function queryFor() {
+      var queryNumber = document.getElementById("query1");
+      var reg1 = new RegExp(queryNumber.value, "g");
+      var numList = document.getElementById("outNum");
+      for (i = 0; i < numList.childNodes.length; i++) {
+        if (numList.childNodes[i].innerHTML.match(reg1) !== null) {
+          numList.childNodes[i].style.backgroundColor = "blue";
+        }
+      }
+    }
+
+    //按钮
+    btnLeftIn.onclick = function () {
+      insert("left");
+    };
+    btnRightIn.onclick = function () {
+      insert("right");
+    };
+    btnLeftOut.onclick = function () {
+      del(-1, "left");
+    };
+    btnRightOut.onclick = function () {
+      del(-1, "right");
+    };
+    outNum.onclick = function () {
+      del(event.target)
+    };
+    btnSearch.onclick = function () {
+      queryFor()
+    };
+  </script>
+</body>
+
+</html>
